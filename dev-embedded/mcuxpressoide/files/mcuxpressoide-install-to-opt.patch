@@ -2,11 +2,11 @@
 +++ b/usr/share/applications/com.nxp.mcuxpressoide.desktop	2022-06-26 21:40:15.799719897 -0400
 @@ -3,7 +3,7 @@
  Version=1.0
- Name=mcuxpressoide 11.6.1_8255 IDE
- Comment=mcuxpressoide 11.6.1_8255 IDE
--Icon=/usr/local/mcuxpressoide-11.6.1_8255/ide/icon.xpm
--Exec=env SWT_GTK3=0 /usr/local/mcuxpressoide-11.6.1_8255/ide/mcuxpressoide
--Path=/usr/local/mcuxpressoide-11.6.1_8255/ide
+ Name=mcuxpressoide 11.7.0_9198 IDE
+ Comment=mcuxpressoide 11.7.0_9198 IDE
+-Icon=/usr/local/mcuxpressoide-11.7.0_9198/ide/icon.xpm
+-Exec=env SWT_GTK3=0 /usr/local/mcuxpressoide-11.7.0_9198/ide/mcuxpressoide
+-Path=/usr/local/mcuxpressoide-11.7.0_9198/ide
 +Icon=/opt/mcuxpressoide/ide/icon.xpm
 +Exec=env SWT_GTK3=0 /opt/mcuxpressoide/ide/mcuxpressoide
 +Path=/opt/mcuxpressoide/ide
