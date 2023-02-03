@@ -28,7 +28,6 @@ RDEPEND="dev-lang/python:2.7
 	>=dev-libs/expat-2.5.0
 	>=x11-libs/libX11-1.8.1
 	>=x11-libs/libICE-1.1.1-r1
-	>=sys-libs/libuuid-1.0.3
 	>=x11-libs/libXt-1.2.1
 	>=x11-libs/libXext-1.3.5
 	>=x11-libs/libXrender-0.9.11
