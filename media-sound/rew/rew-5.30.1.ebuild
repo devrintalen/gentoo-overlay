@@ -11,7 +11,7 @@ SRC_URI="https://www.roomeqwizard.com/installers/REW_linux_no_jre_$(ver_rs 1- _)
 LICENSE="rew"
 SLOT="0"
 KEYWORDS="~amd64"
-RDEPEND="=virtual/jdk-1.8"
+RDEPEND="virtual/jdk:1.8"
 
 
 src_unpack() {
