@@ -1,0 +1,16 @@
+--- work/st-stm32cubeide_1.15.0_20695_20240315_1429_amd64.sh
++++ work/st-stm32cubeide_1.15.0_20695_20240315_1429_amd64.sh
+@@ -531,13 +531,6 @@
+ 
+ chmod +x $thisdir/*.sh
+ 
+-# Ask user to agree on license
+-$thisdir/prompt_linux_license.sh
+-if [ $? -ne 0 ]
+-then
+-	$thisdir/cleanup.sh
+-	exit 1
+-fi
+ export LICENSE_ALREADY_ACCEPTED=1
+ 
+ install_as_root

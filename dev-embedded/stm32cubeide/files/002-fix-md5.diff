@@ -1,0 +1,11 @@
+--- work/st-stm32cubeide_1.15.0_20695_20240315_1429_amd64.sh
++++ work/st-stm32cubeide_1.15.0_20695_20240315_1429_amd64.sh
+@@ -7,7 +7,7 @@
+ fi
+ 
+ CRCsum="4262743268"
+-MD5="2912a9c1fc8aa537d48d92b885840658"
++MD5="ed07c29822b12ea147cf0e4ebc561ace"
+ TMPROOT=${TMPDIR:=/tmp}
+ USER_PWD="$PWD"; export USER_PWD
+ 
