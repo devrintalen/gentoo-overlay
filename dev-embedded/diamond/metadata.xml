@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>devrin@fastmail.com</email>
+		<name>Devrin Talen</name>
+	</maintainer>
+	<use>
+		<flag name="crosslink">Install support for the CrossLink MIPI D-PHY bridge family</flag>
+		<flag name="crosslinkplus">Install support for the CrossLink-Plus family (CrossLink with embedded flash)</flag>
+		<flag name="ecp5">Install support for the ECP5 / ECP5-5G low-power FPGA family</flag>
+		<flag name="latticemico">Install the LatticeMico8/32 soft-core microcontroller IP and SDK</flag>
+		<flag name="machnx">Install support for the Mach-NX secure control FPGA family</flag>
+		<flag name="machxo3d">Install support for the MachXO3D family (MachXO3 with hardware security block)</flag>
+		<flag name="machxo3l">Install support for the MachXO3L low-power family</flag>
+		<flag name="machxo3lfp">Install support for the MachXO3LF / MachXO3HC flash-based family</flag>
+		<flag name="questasim">Install the bundled Questa Sim mixed-language simulator</flag>
+		<flag name="machxo2">Install support for the MachXO2 family</flag>
+	</use>
+</pkgmetadata>

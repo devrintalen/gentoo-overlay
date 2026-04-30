@@ -6,21 +6,19 @@ DESCRIPTION="Lattice Diamond FPGA development environment"
 HOMEPAGE="https://www.latticesemi.com/latticediamond"
 LICENSE="lattice"
 
-# 3.14 ships as a Qt Installer Framework GUI installer that hangs in unattended
-# (--script) mode on this build (parent waits on eventfd while a child IPC
-# process busy-loops on a never-created /tmp/{uuid} Unix socket — looks like a
-# QtIFW 2.0.1 RemoteServerConnection issue specific to Lattice's installer).
-#
-# Workaround: install Diamond by hand once, then repackage the resulting tree
-# as a prebuilt distfile that this ebuild stages into the image. The full
-# recipe is printed by pkg_nofetch when the distfile is missing.
 MY_PV="3.14.0.75.2"
-SRC_URI="diamond-${MY_PV}-amd64-prebuilt.tar.zst"
+SRC_URI="${MY_PV}_Diamond_lin.zip"
 
 S="${WORKDIR}"
 SLOT="0"
 KEYWORDS="~amd64"
 RESTRICT="fetch strip"
+
+# All device families are default-on (matches upstream's "select all"); the
+# big optional add-ons (Questa simulator, LatticeMico) default off because of
+# their size.
+IUSE="+crosslink +crosslinkplus +ecp5 latticemico +machnx +machxo3d
+	+machxo3l +machxo3lfp questasim +machxo2"
 
 RDEPEND="dev-lang/python:2.7
 	>=sys-libs/glibc-2.36-r5
@@ -42,72 +40,105 @@ RDEPEND="dev-lang/python:2.7
 	>=x11-libs/libXext-1.3.5
 	>=x11-libs/libXrender-0.9.11"
 
-BDEPEND="app-arch/zstd
+BDEPEND="|| ( app-arch/7zip app-arch/p7zip )
 	media-gfx/imagemagick"
 
-# Hand-curated QA list from 3.12 covered the prebuilt libs that Lattice ships;
-# 3.14's tree is similar but not yet verified. Catch-all for the first pass —
-# refine after a successful install with:
-#   find /opt/diamond -type f \( -name '*.so*' -o -perm /+x \) \
-#       | sed 's|^/||' | sort -u
 QA_PREBUILT="opt/diamond/*"
 
-src_unpack() {
-	# Portage's default unpack skips .tar.zst on this machine (EAPI=8
-	# notwithstanding). Drive tar directly.
-	cd "${WORKDIR}" || die
-	tar --zstd -xf "${DISTDIR}/${A}" || die "tar --zstd failed on ${A}"
-}
+# The ${MY_PV}_Diamond_lin.run inside the .zip is a Qt Installer Framework
+# 2.0.1 binary. After the ELF + Qt resources, it embeds 30 raw 7z archives
+# glued end-to-end with 40-byte SHA1 hex strings as separators. Each archive
+# corresponds to one of the installer's 22 components — 11 components carry
+# real data, 11 are empty placeholders for greyed-out / deprecated device
+# families whose data already lives in `base`.
+#
+# We slice the archives we want straight out of the .run by exact byte
+# range. The Manifest's checksum on the surrounding .zip guarantees byte
+# identity of the .run, which guarantees the offsets are stable. If Lattice
+# ships a new build, every offset must be re-derived. To do that, walk the
+# .run for the 7z magic ("37 7a bc af 27 1c"), compute each archive's size
+# from its 32-byte header (32 + nextHeaderOffset + nextHeaderSize), and
+# match (size, name) pairs against the trailing TOC in the last ~1.6 KB of
+# the .run.
+RUN_FILE="${MY_PV}_Diamond_lin.run"
+
+# offset size tag — extracted unconditionally
+DIAMOND_BASE_ARCHIVES=(
+	"1384409685   43599561  bin"
+	"1428009286  149747637  cae_library"
+	"1577756963   10874022  data"
+	"1588631025   10122814  docs"
+	"1598753879     102667  embedded_source"
+	"1598856586   20067984  examples"
+	"1618924610  221906052  ispfpga"
+	"1840830702      31669  license"
+	"1840862411    4436084  module"
+	"1845298535  404266137  synpbase"
+	"2249564712    2568690  tcltk"
+)
+
+# use-flag offset size — extracted iff `use $flag` is true
+DIAMOND_OPTIONAL_ARCHIVES=(
+	"questasim       43337851  1130294611"
+	"latticemico   1177322006   207086738"
+	"ecp5          2255445111    13369558"
+	"machxo3l      2252133763     3310987"
+	"machxo3d        38565202     2502051"
+	"machxo3lfp      41067382     2269872"
+	"machnx        1173632591     1592017"
+	"crosslink     2268814798     1643916"
+	"machxo2       1176054572     1267299"
+	"crosslinkplus 1175224977      829466"
+)
 
 pkg_nofetch() {
-	einfo "${SRC_URI} is a hand-built repackage of an interactively-installed"
-	einfo "Diamond ${PV} tree. The IFW installer hangs in unattended mode on"
-	einfo "this Lattice build, so the distfile must be produced manually."
-	einfo
-	einfo "Recipe:"
-	einfo
-	einfo "  1. Unpack the original installer:"
-	einfo "       mkdir -p /tmp/diamond-stage && cd /tmp/diamond-stage"
-	einfo "       unzip ~/Downloads/${MY_PV}_Diamond_lin.zip"
-	einfo "       chmod +x ${MY_PV}_Diamond_lin.run"
-	einfo
-	einfo "  2. Run the GUI installer; pick install directory"
-	einfo "         /tmp/diamond-stage/opt/diamond"
-	einfo "     so the result is a self-contained opt/diamond/ tree under"
-	einfo "     the staging root. Accept the license, select all components."
-	einfo
-	einfo "       ./${MY_PV}_Diamond_lin.run"
-	einfo
-	einfo "  3. Verify the install landed:"
-	einfo "       ls /tmp/diamond-stage/opt/diamond/bin/lin64/diamond"
-	einfo
-	einfo "  4. Tar from the staging root (the ebuild expects opt/diamond"
-	einfo "     at the top of the archive):"
-	einfo "       cd /tmp/diamond-stage"
-	einfo "       tar --zstd -cf ${SRC_URI} opt/"
-	einfo
-	einfo "  5. Stage the distfile and regenerate the Manifest:"
-	einfo "       sudo install -m 644 ${SRC_URI} ${DISTDIR}/"
-	einfo "       cd <overlay>/dev-embedded/diamond"
-	einfo "       ebuild diamond-${PV}.ebuild manifest"
-	einfo
-	einfo "  6. Re-emerge:"
-	einfo "       emerge -av =${CATEGORY}/${PF}"
+	einfo "${SRC_URI} is the Lattice Diamond ${MY_PV} installer."
+	einfo "Download it from ${HOMEPAGE} and place it in your DISTDIR."
+}
+
+# Slice <size> bytes starting at <offset> out of the .run, then 7z-extract
+# into ${ED}/opt/diamond.
+diamond_extract_slice() {
+	local offset="$1" size="$2" tag="$3"
+	local tmp="${T}/diamond-${tag}.7z"
+	einfo "Extracting ${tag} (${size} bytes @ ${offset})"
+	# tail -c +N skips N-1 bytes (lseek on regular files); head -c stops
+	# the stream at exactly `size`. Faster than dd bs=1 by orders of
+	# magnitude, and no alignment hoop-jumping.
+	tail -c "+$((offset + 1))" "${WORKDIR}/${RUN_FILE}" \
+		| head -c "${size}" >"${tmp}" \
+		|| die "slice failed for ${tag}"
+	7z x -y -bso0 -bsp0 -bse2 -o"${ED}/opt/diamond" "${tmp}" \
+		|| die "7z extraction failed for ${tag}"
+	rm -f "${tmp}" || die
 }
 
 src_install() {
-	# The tarball is laid out as opt/diamond/... so a single cp -a stages it.
-	[[ -d "${WORKDIR}/opt/diamond" ]] || die \
-		"${WORKDIR}/opt/diamond not found — distfile layout wrong?"
-	dodir /opt
-	cp -a "${WORKDIR}/opt/diamond" "${ED}/opt/" || die
+	[[ -f "${WORKDIR}/${RUN_FILE}" ]] \
+		|| die "${RUN_FILE} not found after unpack — distfile layout wrong?"
 
-	local icon_src="${ED}/opt/diamond/docs/webhelp/eng/connect/Lattice_Icon.ico"
-	if [[ -f "${icon_src}" ]]; then
+	dodir /opt/diamond
+
+	local spec offset size tag flag
+	for spec in "${DIAMOND_BASE_ARCHIVES[@]}"; do
+		read -r offset size tag <<<"${spec}"
+		diamond_extract_slice "${offset}" "${size}" "${tag}"
+	done
+
+	for spec in "${DIAMOND_OPTIONAL_ARCHIVES[@]}"; do
+		read -r flag offset size <<<"${spec}"
+		use "${flag}" && diamond_extract_slice "${offset}" "${size}" "${flag}"
+	done
+
+	# Icon path's casing has shifted between Diamond versions; find rather
+	# than hard-code.
+	local icon_src
+	icon_src=$(find "${ED}/opt/diamond/docs" -iname Lattice_Icon.ico 2>/dev/null | head -1)
+	if [[ -n "${icon_src}" && -f "${icon_src}" ]]; then
 		convert "${icon_src}" "${T}/lattice.png" || die
 		doicon "${T}/lattice.png"
 	else
-		ewarn "Lattice icon not found at expected path; skipping doicon."
+		ewarn "Lattice icon not found under docs/; skipping doicon."
 	fi
 
 	make_desktop_entry /opt/diamond/bin/lin64/diamond \
@@ -119,6 +150,10 @@ src_install() {
 pkg_postinst() {
 	xdg_desktop_database_update
 	xdg_icon_cache_update
+
+	elog "Diamond requires a node-locked license file to run."
+	elog "Request one at https://www.latticesemi.com/Support/Licensing"
+	elog "and install it as \${HOME}/lattice/license.dat."
 }
 
 pkg_postrm() {
