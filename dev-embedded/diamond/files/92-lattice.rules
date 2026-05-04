@@ -1,0 +1,8 @@
+# Lattice USB2A programming cable
+SUBSYSTEM=="usb", ACTION=="add", ATTRS{idVendor}=="1134", ATTRS{idProduct}=="8001", MODE="0660", GROUP="plugdev", SYMLINK+="lattice-%n"
+
+# HW-USBN-2B (FT2232) programming cable
+SUBSYSTEM=="usb", ACTION=="add", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", MODE="0660", GROUP="plugdev", SYMLINK+="ftdi-%n"
+
+# Detach ftdi_sio so libusb can claim the HW-USBN-2B directly.
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", RUN+="/bin/sh -c 'basename %p > /sys/bus/usb/drivers/ftdi_sio/unbind'"

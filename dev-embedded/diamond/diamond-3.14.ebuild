@@ -1,6 +1,6 @@
 EAPI=8
 
-inherit desktop xdg-utils
+inherit desktop udev xdg-utils
 
 DESCRIPTION="Lattice Diamond FPGA development environment"
 HOMEPAGE="https://www.latticesemi.com/latticediamond"
@@ -145,18 +145,26 @@ src_install() {
 		"Lattice Diamond" \
 		"lattice" \
 		Development
+
+	udev_dorules "${FILESDIR}/92-lattice.rules"
 }
 
 pkg_postinst() {
+	udev_reload
 	xdg_desktop_database_update
 	xdg_icon_cache_update
 
 	elog "Diamond requires a node-locked license file to run."
 	elog "Request one at https://www.latticesemi.com/Support/Licensing"
 	elog "and install it as \${HOME}/lattice/license.dat."
+	elog
+	elog "USB programming cables (Lattice USB2A, HW-USBN-2B) are accessible"
+	elog "to the 'plugdev' group. Add yourself with:"
+	elog "    gpasswd -a <user> plugdev"
 }
 
 pkg_postrm() {
+	udev_reload
 	xdg_desktop_database_update
 	xdg_icon_cache_update
 }
