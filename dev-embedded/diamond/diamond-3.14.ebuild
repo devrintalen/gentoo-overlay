@@ -130,6 +130,17 @@ src_install() {
 		use "${flag}" && diamond_extract_slice "${offset}" "${size}" "${flag}"
 	done
 
+	# Diamond launched from a desktop entry has stdin tied to /dev/null;
+	# the QuestaSim child inherits that and silently falls into batch
+	# mode. Wrap vsim so it forces -gui when launched without a
+	# controlling tty.
+	if use questasim; then
+		local vsim_dir="${ED}/opt/diamond/questasim/linux_x86_64"
+		mv "${vsim_dir}/vsim" "${vsim_dir}/vsim.real" || die
+		cp "${FILESDIR}/vsim-tty-wrapper.sh" "${vsim_dir}/vsim" || die
+		fperms 0755 /opt/diamond/questasim/linux_x86_64/vsim
+	fi
+
 	# Icon path's casing has shifted between Diamond versions; find rather
 	# than hard-code.
 	local icon_src
