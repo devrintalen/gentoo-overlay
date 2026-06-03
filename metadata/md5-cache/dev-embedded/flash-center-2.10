@@ -11,4 +11,4 @@ RESTRICT=fetch strip
 SLOT=0
 SRC_URI=flash-center-linux-i686-v2.10.zip
 _eclasses_=desktop	26d57169ca094c04be416993844ec8bc	toolchain-funcs	58a918e3a42d0156f010dcfd43725be5	udev	1a23882bb73bc31c64a6f00a5e515f34	wrapper	ebaa3beeb43f7e533872b6c37168c7ad	xdg-utils	42869b3c8d86a70ef3cf75165a395e09
-_md5_=cce360478c1506afb4a8b716c2943cab
+_md5_=c05e8a64ec22f425584759b841cefacf

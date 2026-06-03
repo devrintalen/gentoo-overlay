@@ -83,9 +83,16 @@ src_install() {
 	# The zip ships no application icon; files/${PN}.png is the 48x48
 	# window icon extracted from the PNG embedded in lib/libruntime.so
 	# (the Total Phase logo the app sets at runtime).
-	newicon -s 48 "${FILESDIR}/${PN}.png" "${PN}.png"
+	#
+	# The icon is installed as "flashcenter", not "${PN}": KDE's
+	# KIconLoader tries dash-truncated fallback names within each
+	# theme before moving down the inheritance chain, so an icon named
+	# flash-center loses to breeze's actions/flash.svg and never
+	# renders in the Plasma menu. A dash-free name cannot be
+	# truncated.
+	newicon -s 48 "${FILESDIR}/${PN}.png" flashcenter.png
 
-	make_desktop_entry flashcenter "Total Phase Flash Center" "${PN}" \
+	make_desktop_entry flashcenter "Total Phase Flash Center" flashcenter \
 		"Development;Electronics"
 
 	udev_dorules "${FILESDIR}/99-${PN}.rules"
