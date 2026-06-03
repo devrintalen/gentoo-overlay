@@ -1,0 +1,11 @@
+# Total Phase USB host adapters — grant the plugdev group access so
+# Control Center can claim the device without root.
+
+# Aardvark I2C/SPI Host Adapter
+SUBSYSTEM=="usb", ACTION=="add", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="e0d0", MODE="0660", GROUP="plugdev"
+
+# Cheetah SPI Host Adapter
+SUBSYSTEM=="usb", ACTION=="add", ATTRS{idVendor}=="1679", ATTRS{idProduct}=="2002", MODE="0660", GROUP="plugdev"
+
+# The Promira Serial Platform enumerates as a USB network interface and
+# is reached over TCP/IP — no device-node rule is needed.

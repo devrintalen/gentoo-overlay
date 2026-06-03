@@ -1,0 +1,15 @@
+BDEPEND=|| ( app-arch/7zip app-arch/p7zip ) media-gfx/imagemagick virtual/pkgconfig
+DEFINED_PHASES=install nofetch postinst postrm
+DESCRIPTION=Lattice Diamond FPGA development environment
+EAPI=8
+HOMEPAGE=https://www.latticesemi.com/latticediamond
+INHERIT=desktop udev xdg-utils
+IUSE=+crosslink +crosslinkplus +ecp5 latticemico +machnx +machxo3d +machxo3l +machxo3lfp questasim +machxo2
+KEYWORDS=~amd64
+LICENSE=lattice
+RDEPEND=dev-lang/python:2.7 >=sys-libs/glibc-2.36-r5 >=media-libs/libjpeg-turbo-2.1.4 >=media-libs/tiff-4.5.0 >=sys-libs/zlib-1.2.13-r1 >=dev-libs/glib-2.74.4 >=sys-libs/libselinux-3.4 >=dev-libs/libgamin-0.1.10-r6 >=dev-libs/libusb-compat-0.1.5-r3 >=media-libs/freetype-2.12.1-r1 >=media-libs/fontconfig-2.14.0-r1 >=dev-libs/expat-2.5.0 >=x11-libs/libX11-1.8.1 >=x11-libs/libICE-1.1.1-r1 >=x11-libs/libXt-1.2.1 >=x11-libs/libXft-2.3.6 >=x11-libs/libXi-1.8 >=x11-libs/libXext-1.3.5 >=x11-libs/libXrender-0.9.11
+RESTRICT=fetch strip
+SLOT=0
+SRC_URI=3.14.0.75.2_Diamond_lin.zip
+_eclasses_=desktop	26d57169ca094c04be416993844ec8bc	toolchain-funcs	58a918e3a42d0156f010dcfd43725be5	udev	1a23882bb73bc31c64a6f00a5e515f34	xdg-utils	42869b3c8d86a70ef3cf75165a395e09
+_md5_=66819db723461c38a1596a44a5ba7ced

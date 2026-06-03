@@ -1,0 +1,14 @@
+BDEPEND=app-arch/unzip virtual/pkgconfig
+DEFINED_PHASES=install nofetch postinst postrm
+DESCRIPTION=Total Phase Control Center Serial GUI for Aardvark, Cheetah, and Promira
+EAPI=8
+HOMEPAGE=https://www.totalphase.com/products/control-center-serial/
+INHERIT=desktop udev wrapper xdg-utils
+KEYWORDS=~amd64
+LICENSE=totalphase
+RDEPEND=acct-group/plugdev dev-libs/glib:2 media-libs/fontconfig media-libs/freetype sys-libs/glibc virtual/zlib x11-libs/gtk+:2 x11-libs/libICE x11-libs/libSM x11-libs/libX11 x11-libs/libXext x11-libs/libXrender
+RESTRICT=fetch strip
+SLOT=0
+SRC_URI=control-center-linux-x86_64-v5.10.zip
+_eclasses_=desktop	26d57169ca094c04be416993844ec8bc	toolchain-funcs	58a918e3a42d0156f010dcfd43725be5	udev	1a23882bb73bc31c64a6f00a5e515f34	wrapper	ebaa3beeb43f7e533872b6c37168c7ad	xdg-utils	42869b3c8d86a70ef3cf75165a395e09
+_md5_=b3c5605d8aca2d4c34ba8a63be638dd8

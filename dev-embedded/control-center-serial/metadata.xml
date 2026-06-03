@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>devrin@fastmail.com</email>
+		<name>Devrin Talen</name>
+	</maintainer>
+	<longdescription>
+		Total Phase Control Center Serial Software: graphical front-end
+		for the Aardvark I2C/SPI Host Adapter, Cheetah SPI Host Adapter,
+		and Promira Serial Platform. Repackaged proprietary vendor
+		binaries (bundled Qt 4.8); installs self-contained under /opt.
+	</longdescription>
+</pkgmetadata>
