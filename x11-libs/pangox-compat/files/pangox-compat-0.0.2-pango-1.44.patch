@@ -1,0 +1,86 @@
+Build against pango >= 1.44, which removed the PANGO_ENABLE_BACKEND
+declarations (pango_font_metrics_new, pango_config_key_get) from its
+public headers while still exporting the symbols, dropped the
+find_shaper member from PangoFontClass, and extended the script_shape
+vfunc signature with the enclosing paragraph.
+
+--- a/pangox.c
++++ b/pangox.c
+@@ -29,6 +29,10 @@
+ #include "pango-impl-utils.h"
+ #include "pangox-private.h"
+ 
++/* pango >= 1.44 removed this declaration from pango-font.h
++ * (PANGO_ENABLE_BACKEND) but still exports the symbol. */
++PangoFontMetrics *pango_font_metrics_new (void);
++
+ #define PANGO_TYPE_X_FONT              (pango_x_font_get_type ())
+ #define PANGO_X_FONT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_X_FONT, PangoXFont))
+ #define PANGO_X_FONT_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), PANGO_TYPE_X_FONT, PangoXFontClass))
+@@ -76,9 +80,6 @@
+ static PangoFontDescription *pango_x_font_describe          (PangoFont        *font);
+ static PangoCoverage *       pango_x_font_get_coverage      (PangoFont        *font,
+ 							     PangoLanguage    *language);
+-static PangoEngineShape *    pango_x_font_find_shaper       (PangoFont        *font,
+-							     PangoLanguage    *language,
+-							     guint32           ch);
+ static void                  pango_x_font_get_glyph_extents (PangoFont        *font,
+ 							     PangoGlyph        glyph,
+ 							     PangoRectangle   *ink_rect,
+@@ -279,7 +280,6 @@
+ 
+   font_class->describe = pango_x_font_describe;
+   font_class->get_coverage = pango_x_font_get_coverage;
+-  font_class->find_shaper = pango_x_font_find_shaper;
+   font_class->get_glyph_extents = pango_x_font_get_glyph_extents;
+   font_class->get_metrics = pango_x_font_get_metrics;
+   font_class->get_font_map = pango_x_font_get_font_map;
+@@ -1368,19 +1368,6 @@
+   return pango_x_face_get_coverage (xfont->xface, font, language);
+ }
+ 
+-static PangoEngineShape *
+-pango_x_font_find_shaper (PangoFont     *font G_GNUC_UNUSED,
+-			  PangoLanguage *language,
+-			  guint32        ch)
+-{
+-  PangoMap *shape_map = NULL;
+-  PangoScript script;
+-
+-  shape_map = pango_x_get_shaper_map (language);
+-  script = pango_script_for_unichar (ch);
+-  return (PangoEngineShape *)pango_map_get_engine (shape_map, script);
+-}
+-
+ /* Utility functions */
+ 
+ static XCharStruct *
+--- a/pangox-fontmap.c
++++ b/pangox-fontmap.c
+@@ -38,6 +38,10 @@
+ 
+ #include "pangox-private.h"
+ 
++/* pango >= 1.44 removed this declaration from pango-utils.h
++ * (PANGO_ENABLE_BACKEND) but still exports the symbol. */
++char *pango_config_key_get (const char *key);
++
+ typedef struct _PangoXFamily       PangoXFamily;
+ typedef struct _PangoXSizeInfo     PangoXSizeInfo;
+ 
+--- a/basic-x.c
++++ b/basic-x.c
+@@ -556,9 +556,11 @@
+ basic_engine_shape (PangoEngineShape *engine G_GNUC_UNUSED,
+ 		    PangoFont        *font,
+ 		    const char       *text,
+-		    gint              length,
++		    unsigned int      length,
+ 		    const PangoAnalysis *analysis,
+-		    PangoGlyphString *glyphs)
++		    PangoGlyphString *glyphs,
++		    const char       *paragraph_text G_GNUC_UNUSED,
++		    unsigned int      paragraph_length G_GNUC_UNUSED)
+ {
+   int n_chars;
+   int i;

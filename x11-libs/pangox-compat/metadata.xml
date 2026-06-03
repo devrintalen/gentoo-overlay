@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>devrin@fastmail.com</email>
+		<name>Devrin Talen</name>
+	</maintainer>
+	<longdescription>
+		Archived GNOME compatibility library providing the pangox API
+		that was removed from pango 1.31. Carried in this overlay only
+		to satisfy the libpangox-1.0.so.0 DT_NEEDED entry of the
+		prebuilt Total Phase Flash Center binary
+		(dev-embedded/flash-center).
+	</longdescription>
+	<upstream>
+		<remote-id type="gnome-gitlab">Archive/pangox-compat</remote-id>
+	</upstream>
+</pkgmetadata>

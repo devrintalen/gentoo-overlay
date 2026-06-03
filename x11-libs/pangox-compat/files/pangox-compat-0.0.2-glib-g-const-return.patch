@@ -1,0 +1,23 @@
+G_CONST_RETURN was removed from glib in 2.66; it had expanded to plain
+const since glib 2.30.
+
+--- a/pangox-fontmap.c
++++ b/pangox-fontmap.c
+@@ -1453,7 +1453,7 @@
+ }
+ 
+ 
+-G_CONST_RETURN char *
++const char *
+ pango_x_fontmap_name_from_atom (PangoFontMap *fontmap,
+ 				Atom          atom)
+ {
+@@ -1657,7 +1657,7 @@
+     }
+ }
+ 
+-static G_CONST_RETURN char *
++static const char *
+ pango_x_family_get_name (PangoFontFamily  *family)
+ {
+   PangoXFamily *xfamily = PANGO_X_FAMILY (family);
