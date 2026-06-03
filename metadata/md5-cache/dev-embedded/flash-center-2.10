@@ -1,0 +1,14 @@
+BDEPEND=app-arch/unzip virtual/pkgconfig
+DEFINED_PHASES=install nofetch postinst postrm
+DESCRIPTION=Total Phase Flash Center memory programmer for Aardvark, Cheetah, and Promira
+EAPI=8
+HOMEPAGE=https://www.totalphase.com/products/flash-center/
+INHERIT=desktop udev wrapper xdg-utils
+KEYWORDS=~amd64
+LICENSE=totalphase
+RDEPEND=acct-group/plugdev app-accessibility/at-spi2-core[abi_x86_32(-)] dev-libs/glib:2[abi_x86_32(-)] sys-libs/glibc x11-libs/gdk-pixbuf:2[abi_x86_32(-)] x11-libs/gtk+:2[abi_x86_32(-)] x11-libs/libX11[abi_x86_32(-)] x11-libs/libXft[abi_x86_32(-)] x11-libs/libXinerama[abi_x86_32(-)] x11-libs/libXxf86vm[abi_x86_32(-)] x11-libs/pango[abi_x86_32(-)] x11-libs/pangox-compat[abi_x86_32(-)]
+RESTRICT=fetch strip
+SLOT=0
+SRC_URI=flash-center-linux-i686-v2.10.zip
+_eclasses_=desktop	26d57169ca094c04be416993844ec8bc	toolchain-funcs	58a918e3a42d0156f010dcfd43725be5	udev	1a23882bb73bc31c64a6f00a5e515f34	wrapper	ebaa3beeb43f7e533872b6c37168c7ad	xdg-utils	42869b3c8d86a70ef3cf75165a395e09
+_md5_=cce360478c1506afb4a8b716c2943cab

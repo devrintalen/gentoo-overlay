@@ -11,7 +11,7 @@ A personal Gentoo Portage overlay named `devrintalen-overlay` (see `profiles/rep
 - `<category>/<pkgname>/<pkgname>-<version>.ebuild` — ebuild per version
 - `<category>/<pkgname>/Manifest` — DIST/EBUILD/AUX hashes (regenerate with `ebuild <ebuild> manifest`)
 - `<category>/<pkgname>/files/` — patches passed via `${FILESDIR}` / `PATCHES=()`
-- `<category>/<pkgname>/licenses/` — package-local license texts for non-standard licenses (e.g. `lattice`, `rew`); the `LICENSE=` value must match a filename here or in the main tree
+- `licenses/` — repo-level license texts for non-standard licenses (e.g. `totalphase`, shared by the Total Phase packages); the `LICENSE=` value must match a filename here or in the main tree. This is the directory portage/pkgcheck actually consult. (`dev-embedded/diamond` and `media-sound/rew` still carry older package-local `licenses/` dirs, which portage ignores — migrate them here when touching those packages.)
 - `.gitignore` excludes `*~` (Emacs/undo-tree backups). Many `*.ebuild~` and `*.~undo-tree~` files are present in working copies — leave them alone, do not commit them.
 
 ## Common operations

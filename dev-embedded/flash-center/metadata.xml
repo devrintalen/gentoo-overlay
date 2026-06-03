@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>devrin@fastmail.com</email>
+		<name>Devrin Talen</name>
+	</maintainer>
+	<longdescription>
+		Total Phase Flash Center Software: erase, program, and verify
+		I2C/SPI EEPROM and flash memory chips with the Aardvark I2C/SPI
+		Host Adapter, Cheetah SPI Host Adapter, and Promira Serial
+		Platform. Repackaged proprietary vendor binary (32-bit GTK2);
+		installs self-contained under /opt.
+	</longdescription>
+</pkgmetadata>
